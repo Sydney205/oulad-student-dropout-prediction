@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 
 # Load the trained model
-# Make sure the 'logistic_regression_dropout_model.joblib' file is in the same directory
-# or provide the full path to the file.
 try:
     model = joblib.load('logistic_regression_dropout_model.joblib')
 except FileNotFoundError:
