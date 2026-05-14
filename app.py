@@ -3,7 +3,6 @@ import joblib
 import pandas as pd
 import numpy as np
 
-# Load the trained model
 try:
     model = joblib.load('logistic_regression_dropout_model.joblib')
 except FileNotFoundError:
@@ -11,7 +10,6 @@ except FileNotFoundError:
     st.stop()
 
 
-# Define the mappings used during training
 education_mapping = {
     'No Formal quals': 0,
     'Lower Than A Level': 1,
@@ -37,31 +35,26 @@ imd_mapping = {
     '70-80%': 7,
     '80-90%': 8,
     '90-100%': 9,
-    'Unknown': -1 # 'Unknown' is mapped to a distinct numerical value.
+    'Unknown': -1
 }
 
-# Reverse mappings for Streamlit selectbox options
 rev_education_mapping = {v: k for k, v in education_mapping.items()}
 rev_age_mapping = {v: k for k, v in age_mapping.items()}
 rev_imd_mapping = {v: k for k, v in imd_mapping.items()}
 
-# Streamlit UI
 st.set_page_config(page_title="Student Dropout Prediction", layout="centered")
 st.title("Student Dropout Prediction")
 st.markdown("Enter student details to predict their dropout risk.")
 
-# Input fields for features
 with st.sidebar:
     st.header("Student Features")
 
-    # Numerical inputs
     num_of_prev_attempts = st.number_input("Number of Previous Attempts", min_value=0, max_value=10, value=0)
     studied_credits = st.number_input("Studied Credits", min_value=30, max_value=655, value=60)
     sum_click = st.number_input("Total Clicks (Engagement)", min_value=0, value=500)
     score = st.number_input("Median Assessment Score", min_value=0, max_value=100, value=70)
     disability = st.selectbox("Disability Status", options=[0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
 
-    # Categorical inputs with mappings
     selected_education = st.selectbox("Highest Education", options=list(rev_education_mapping.values()))
     highest_education = education_mapping[selected_education]
 
@@ -78,8 +71,6 @@ with st.sidebar:
         'South West Region', 'Wales', 'West Midlands Region', 'Yorkshire Region'
     ])
 
-# Create a DataFrame for prediction
-# Ensure all columns expected by the model are present and in the correct order
 X_cols = [
     'highest_education', 'imd_band', 'age_band', 'num_of_prev_attempts',
     'studied_credits', 'disability', 'sum_click', 'score',
@@ -101,18 +92,16 @@ input_data['disability'] = disability
 input_data['sum_click'] = sum_click
 input_data['score'] = score
 
-# Set one-hot encoded gender
 if gender == 'Female':
     input_data['gender_F'] = 1
 else:
     input_data['gender_M'] = 1
 
-# Set one-hot encoded region
 input_data[f'region_{selected_region}'] = 1
 
 if st.button("Predict Dropout Risk"):
     prediction = model.predict(input_data)
-    prediction_proba = model.predict_proba(input_data)[:, 1] # Probability of dropout (class 1)
+    prediction_proba = model.predict_proba(input_data)[:, 1]
 
     st.subheader("Prediction Results")
     if prediction[0] == 1:
