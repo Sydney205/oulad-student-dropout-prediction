@@ -54,7 +54,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🎓 Student Dropout Prediction")
+st.title("👩‍🎓 Student Dropout Prediction")
 st.write("Fill in student details below to predict dropout risk.")
 
 
