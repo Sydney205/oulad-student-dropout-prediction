@@ -51,7 +51,11 @@ imd_mapping = {
 # ----------------------------
 st.set_page_config(page_title="Student Dropout Prediction", layout="centered")
 st.title("Student Dropout Prediction")
-st.markdown("Enter student details to predict their dropout risk.")
+st.markdown(
+    """This is a machine learning model that predicts student dropout risk in online learning using the OULAD dataset to enable early academic intervention
+
+        Enter student details to predict their dropout risk."""
+)
 
 st.markdown("---")
 st.subheader("📋 Input Field Guide")
